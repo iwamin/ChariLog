@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,5 +73,10 @@ public class ChariLogRestController {
 	@RequestMapping(value = "gps", method = RequestMethod.GET)
 	List<GPSData> downloadGPSData() {
 		return gpsDataService.findAll();
+	}
+
+	@RequestMapping(value = "test", method = RequestMethod.POST)
+	void testPost(@RequestBody String requestBody, @RequestHeader("Content-Type") String type) {
+		System.out.println("TEST:\n" + type + "\n" + requestBody);
 	}
 }
