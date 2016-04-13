@@ -12,34 +12,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.User;
 
+import static com.example.constant.SQLConstants.*;
+
 @Repository
 @Transactional
 public class UserRepository {
-	@Autowired
-	NamedParameterJdbcTemplate jdbcTemplate;
-	
-	private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
-		Integer id = rs.getInt("id");
-		String name = rs.getString("name");
-		String password = rs.getString("password");
-		return new User(id, name, password);
-	};
-	
-	public User findOneByName(String name) {
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", name);
-		
-		List<User> users = jdbcTemplate.query(
-				"SELECT id, name, password FROM users WHERE name = :name",
-				param,
-				USER_ROW_MAPPER
-				);
-		
-		if (users.isEmpty()) {
-			return null;
-		} else {
-			return users.get(0);
-		}
-	}
-	
 
+	@Autowired
+	private NamedParameterJdbcTemplate jdbcTemplate;
+
+	private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
+		String id = rs.getString(COLUMN_USER_USER_ID);
+		String password = rs.getString(COLUMN_USER_PASSWORD);
+		return new User(id, password);
+	};
+
+//	public User findOneByName(String userId) {
+//		SqlParameterSource param = new MapSqlParameterSource().addValue(COLUMN_USER_ID, userId);
+//		StringBuilder sql = new StringBuilder();
+//		sql.append("SELECT * FROM ");
+//		sql.append(TABLE_NAME_USER);
+//		sql.append(" WHERE ");
+//		sql.append(COLUMN_USER_ID);
+//		sql.append(" = :");
+//		sql.append(COLUMN_USER_ID);
+//
+//		List<User> users = jdbcTemplate.query(sql.toString(), param, USER_ROW_MAPPER);
+//
+//		if (users.isEmpty()) {
+//			return null;
+//		} else {
+//			return users.get(0);
+//		}
+//	}
 }

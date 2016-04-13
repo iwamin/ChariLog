@@ -24,31 +24,29 @@ public class ChariLogRestController {
 	@Autowired
 	CyclingRecordService cyclingRecordService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "account", method = RequestMethod.GET)
 	List<User> getUserList() {
 		return userService.findAll();
 	}
-	
-	
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	ResponseEntity<User> create(@RequestBody User user) {
+
+	@RequestMapping(value = "account", method = RequestMethod.POST)
+	ResponseEntity<User> create(@RequestBody RequestBodyUser requestBody) {
+		User user = new User(requestBody.getUserId(), requestBody.getPassword());
 		ResponseEntity<User> response;
 
 		if (userService.isExisting(user)) {
-			response = new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
+			response = new ResponseEntity<>(user, null, HttpStatus.CONFLICT);
 		} else {
-			userService.create(user);
-			response = new ResponseEntity<>(null, null, HttpStatus.CREATED);
+			User created = userService.create(user);
+			response = new ResponseEntity<>(created, null, HttpStatus.CREATED);
 		}
-
 		return response;
 	}
-	
-	@RequestMapping(value = "record", method = RequestMethod.POST)
-	ResponseEntity<CyclingRecord> uploadRecord(@RequestBody CyclingRecord record) {
-		ResponseEntity<CyclingRecord> response = new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
 
-		cyclingRecordService.create(record);
+	@RequestMapping(value = "record", method = RequestMethod.POST)
+	ResponseEntity<CyclingRecord> uploadRecord(@RequestBody RequestBodyCyclingRecord requestBody) {
+		CyclingRecord record = cyclingRecordService.create(requestBody);
+		ResponseEntity<CyclingRecord> response = new ResponseEntity<>(record, null, HttpStatus.ACCEPTED);
 		return response;
 	}
 

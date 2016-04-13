@@ -2,23 +2,34 @@ package com.example.domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import static com.example.constant.SQLConstants.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = TABLE_NAME_USER)
+//@ToString(exclude = "records")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
 	@Id
-	@GeneratedValue
-	private Integer id;
+	@Column(name = COLUMN_USER_USER_ID)
+	private String userId;
 	
-	@Column(nullable = false, unique = true)
-	private String name;
-	
-	@Column(nullable = false)
+	@Column(name = COLUMN_USER_PASSWORD, nullable = false)
+	@JsonIgnore
 	private String password;
+	
+//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+//	@JsonIgnore
+//	private List<CyclingRecord> records;
+//	
+//	public User(String userId, String password) {
+//		this.userId = userId;
+//		this.password = password;
+//	}
 }

@@ -25,7 +25,7 @@ public class UserService {
 	}
 
 	public boolean isExisting(User user) {
-		return (userRepository.findOneByName(user.getName()) != null);
+		return (userJpaRepository.findOne(user.getUserId()) != null);
 	}
 
 	public User create(User user) {
