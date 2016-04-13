@@ -25,11 +25,7 @@ public class UserService {
 	}
 
 	public boolean isExisting(User user) {
-		if (userRepository.findOneByName(user.getName()) != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return (userRepository.findOneByName(user.getName()) != null);
 	}
 
 	public User create(User user) {

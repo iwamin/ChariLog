@@ -18,7 +18,7 @@ public class UserRepository {
 	@Autowired
 	NamedParameterJdbcTemplate jdbcTemplate;
 	
-	private static final RowMapper<User> rowMapper = (rs, i) -> {
+	private static final RowMapper<User> USER_ROW_MAPPER = (rs, i) -> {
 		Integer id = rs.getInt("id");
 		String name = rs.getString("name");
 		String password = rs.getString("password");
@@ -31,7 +31,7 @@ public class UserRepository {
 		List<User> users = jdbcTemplate.query(
 				"SELECT id, name, password FROM users WHERE name = :name",
 				param,
-				rowMapper
+				USER_ROW_MAPPER
 				);
 		
 		if (users.isEmpty()) {

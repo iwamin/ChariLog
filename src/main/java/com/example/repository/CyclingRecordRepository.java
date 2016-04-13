@@ -14,7 +14,7 @@ public class CyclingRecordRepository {
 	@Autowired
 	NamedParameterJdbcTemplate jdbcTemplate;
 	
-	private static final RowMapper<CyclingRecord> rowMapper = (rs, i) -> {
+	private static final RowMapper<CyclingRecord> CYCLING_RECORD_ROW_MAPPER = (rs, i) -> {
 		Integer id = rs.getInt("id");
 		Integer userId = rs.getInt("user_id");
 		String deviceId = rs.getString("device_id");
