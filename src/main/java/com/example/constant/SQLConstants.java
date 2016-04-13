@@ -17,4 +17,12 @@ public class SQLConstants {
 	public static final String COLUMN_CYCRECORD_DISTANCE = "distance";
 	public static final String COLUMN_CYCRECORD_AVE_SPEED = "ave_speed";
 	public static final String COLUMN_CYCRECORD_MAX_SPEED = "max_speed";
+
+	public static final String TABLE_NAME_GPS_DATA = "gps_data";
+	public static final String COLUMN_GPSDATA_GPS_ID = "gps_id";
+	public static final String COLUMN_GPSDATA_RECORD_ID = "record_id";
+	public static final String COLUMN_GPSDATA_DATE_TIME = "dateTime";
+	public static final String COLUMN_GPSDATA_LATITUDE = "latitude";
+	public static final String COLUMN_GPSDATA_LONGITUDE = "longitude";
+	public static final String COLUMN_GPSDATA_ALTITUDE = "altitude";
 }

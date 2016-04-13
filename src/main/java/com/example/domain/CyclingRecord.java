@@ -19,7 +19,7 @@ public class CyclingRecord {
 	@GeneratedValue
 	@Column(name = COLUMN_CYCRECORD_RECORD_ID)
 	private Integer recordId;
-	
+
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(nullable = false, name = COLUMN_USER_USER_ID)
 //	private User user;

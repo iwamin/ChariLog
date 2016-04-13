@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.CyclingRecord;
+import com.example.domain.GPSData;
 import com.example.domain.User;
 import com.example.service.CyclingRecordService;
+import com.example.service.GPSDataService;
 import com.example.service.UserService;
 
 @RestController
@@ -23,6 +25,9 @@ public class ChariLogRestController {
 
 	@Autowired
 	CyclingRecordService cyclingRecordService;
+
+	@Autowired
+	GPSDataService gpsDataService;
 
 	@RequestMapping(value = "account", method = RequestMethod.GET)
 	List<User> getUserList() {
@@ -53,5 +58,19 @@ public class ChariLogRestController {
 	@RequestMapping(value = "record", method = RequestMethod.GET)
 	List<CyclingRecord> downloadRecord() {
 		return cyclingRecordService.findAll();
+	}
+
+	@RequestMapping(value = "gps", method = RequestMethod.POST)
+	ResponseEntity<GPSData> uploadGPSData(@RequestBody RequestBodyGPSData requestBody) {
+		System.out.println(requestBody.toString());
+		GPSData created = gpsDataService.create(requestBody);
+		System.out.println(created.toString());
+		ResponseEntity<GPSData> response = new ResponseEntity<>(created, null, HttpStatus.ACCEPTED);
+		return response;
+	}
+
+	@RequestMapping(value = "gps", method = RequestMethod.GET)
+	List<GPSData> downloadGPSData() {
+		return gpsDataService.findAll();
 	}
 }
