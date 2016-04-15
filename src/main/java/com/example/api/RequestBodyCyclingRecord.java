@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestBodyCyclingRecord {
 	private String userId;
+	private String password;
 	private String deviceId;
 	private Long dateTime;
 	private String date;
