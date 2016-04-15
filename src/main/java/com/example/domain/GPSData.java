@@ -2,7 +2,7 @@ package com.example.domain;
 
 import javax.persistence.*;
 
-import com.example.api.RequestBodyGPSData;
+import com.example.api.GPSElement;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class GPSData {
 	@Column(name = COLUMN_GPSDATA_ALTITUDE, nullable = false)
 	private Double altitude;
 
-	public GPSData(RequestBodyGPSData request) {
+	public GPSData(GPSElement request) {
 		this.dateTime = request.getDateTime();
 		this.latitude = request.getLatitude();
 		this.longitude = request.getLongitude();

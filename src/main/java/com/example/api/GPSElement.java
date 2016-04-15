@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestBodyGPSData {
-	private String key;
-	private GPSElement[] data;
+public class GPSElement {
+	private Long dateTime;
+	private Double latitude;
+	private Double longitude;
+	private Double altitude;
 }

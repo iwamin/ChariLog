@@ -25,4 +25,8 @@ public class SQLConstants {
 	public static final String COLUMN_GPSDATA_LATITUDE = "latitude";
 	public static final String COLUMN_GPSDATA_LONGITUDE = "longitude";
 	public static final String COLUMN_GPSDATA_ALTITUDE = "altitude";
+	
+	public static final String TABLE_NAME_KEY_TO_RECORD = "key_to_record";
+	public static final String COLUMN_KEY2RECORD_KEY = "key";
+	public static final String COLUMN_KEY2RECORD_RECORD_ID = "recordId";
 }
