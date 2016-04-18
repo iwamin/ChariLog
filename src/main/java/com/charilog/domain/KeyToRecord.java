@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import static com.charilog.constant.SQLConstants.*;
 
 @Entity
-@Table(name = TABLE_NAME_KEY_TO_RECORD)
+@Table(name = TABLE_NAME_KEY2RECORD)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +19,7 @@ public class KeyToRecord {
 	
 	@Column(name = COLUMN_KEY2RECORD_RECORD_ID, nullable = false)
 	private Integer recordId;
+
+	@Column(name = COLUMN_KEY2RECORD_USER_ID, nullable = false)
+	private String userId;
 }

@@ -28,6 +28,20 @@ public class UserService {
 		return (userJpaRepository.findOne(user.getUserId()) != null);
 	}
 
+	public boolean authenticate(User user) {
+		User found = userJpaRepository.findOne(user.getUserId());
+
+		if (found == null) {
+			return false;
+		}
+
+		if (found.getPassword().equals(user.getPassword())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public User create(User user) {
 		return userJpaRepository.save(user);
 	}

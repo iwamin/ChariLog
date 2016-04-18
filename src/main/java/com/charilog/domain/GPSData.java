@@ -2,7 +2,7 @@ package com.charilog.domain;
 
 import javax.persistence.*;
 
-import com.charilog.api.GPSElement;
+import com.charilog.api.param.GPSElement;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

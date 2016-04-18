@@ -1,4 +1,4 @@
-package com.charilog.api;
+package com.charilog.api.param;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestBodyCyclingRecord {
+public class ReqPostCyclingRecord {
 	private String userId;
 	private String password;
 	private String deviceId;
