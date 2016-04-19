@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.charilog.api.param.GPSElement;
 import com.charilog.api.param.ReqAccountInfo;
+import com.charilog.api.param.ReqInvalidateKey;
 import com.charilog.api.param.ReqUploadCyclingRecord;
 import com.charilog.api.param.ReqUploadGPSData;
 import com.charilog.api.param.ResDownloadCyclingRecord;
@@ -124,7 +125,7 @@ public class ChariLogRestController {
 	}
 
 	// GPSデータ(走行記録1件分)を登録
-	@RequestMapping(value = "gps", method = RequestMethod.POST)
+	@RequestMapping(value = "gps/upload", method = RequestMethod.POST)
 	ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
 		System.out.println(requestBody.toString());
 
@@ -147,8 +148,16 @@ public class ChariLogRestController {
 		return response;
 	}
 
-	// GPSデータ(走行記録1件分)を取得
-	@RequestMapping(value = "gps", method = RequestMethod.GET)
+	// GPSデータ登録用keyの無効化要求
+	@RequestMapping(value = "gps/invalidate-key", method = RequestMethod.POST)
+	ResponseEntity<Object> invalidateKey(@RequestBody ReqInvalidateKey body) {
+		// 作成中
+		System.out.println(body.toString());
+		return new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
+	}
+
+	// GPSデータテーブルの取得(※デバッグ用)
+	@RequestMapping(value = "gps/download", method = RequestMethod.GET)
 	List<GPSData> downloadGPSData() {
 		return gpsDataService.findAll();
 	}
