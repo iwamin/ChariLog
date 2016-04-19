@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ReqPostUser {
+@NoArgsConstructor
+public class ReqAccountInfo {
 	private String userId;
 	private String password;
 }

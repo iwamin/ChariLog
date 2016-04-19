@@ -2,7 +2,7 @@ package com.charilog.domain;
 
 import javax.persistence.*;
 
-import com.charilog.api.param.ReqPostCyclingRecord;
+import com.charilog.api.param.ReqUploadCyclingRecord;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -18,14 +18,13 @@ import static com.charilog.constant.SQLConstants.*;
 public class CyclingRecord {
 	@Id
 	@GeneratedValue
-	@JsonIgnore
 	@Column(name = COLUMN_CYCRECORD_RECORD_ID)
 	private Integer recordId;
 
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(nullable = false, name = COLUMN_USER_USER_ID)
 //	private User user;
-	
+
 //	@JoinColumn(nullable = false, table = TABLE_NAME_USER, name = COLUMN_USER_USER_ID)
 	@JsonIgnore
 	@Column(name = COLUMN_CYCRECORD_USER_ID, nullable = false)
@@ -59,7 +58,7 @@ public class CyclingRecord {
 	@Column(name = COLUMN_CYCRECORD_MAX_SPEED)
 	private Double maxSpeed;
 
-	public CyclingRecord(ReqPostCyclingRecord request) {
+	public CyclingRecord(ReqUploadCyclingRecord request) {
 		this.userId = request.getUserId();
 		this.deviceId = request.getDeviceId();
 		this.dateTime = request.getDateTime();

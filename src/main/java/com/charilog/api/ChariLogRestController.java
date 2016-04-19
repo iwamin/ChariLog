@@ -1,5 +1,6 @@
 package com.charilog.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.charilog.api.param.GPSElement;
-import com.charilog.api.param.ReqGetCyclingRecord;
-import com.charilog.api.param.ReqPostCyclingRecord;
-import com.charilog.api.param.ReqPostGPSData;
-import com.charilog.api.param.ReqPostUser;
-import com.charilog.api.param.ResPostCyclingRecord;
+import com.charilog.api.param.ReqAccountInfo;
+import com.charilog.api.param.ReqUploadCyclingRecord;
+import com.charilog.api.param.ReqUploadGPSData;
+import com.charilog.api.param.ResDownloadCyclingRecord;
+import com.charilog.api.param.ResUploadCyclingRecord;
 import com.charilog.domain.CyclingRecord;
 import com.charilog.domain.GPSData;
 import com.charilog.domain.KeyToRecord;
@@ -50,7 +51,7 @@ public class ChariLogRestController {
 
 	// ユーザー作成
 	@RequestMapping(value = "account", method = RequestMethod.POST)
-	ResponseEntity<User> create(@RequestBody ReqPostUser requestBody) {
+	ResponseEntity<User> create(@RequestBody ReqAccountInfo requestBody) {
 		User user = new User(requestBody.getUserId(), requestBody.getPassword());
 		ResponseEntity<User> response;
 
@@ -64,20 +65,20 @@ public class ChariLogRestController {
 	}
 
 	// 走行記録1件登録
-	@RequestMapping(value = "record", method = RequestMethod.POST)
-	ResponseEntity<ResPostCyclingRecord> uploadRecord(@RequestBody ReqPostCyclingRecord requestBody) {
+	@RequestMapping(value = "record/upload", method = RequestMethod.POST)
+	ResponseEntity<ResUploadCyclingRecord> uploadRecord(@RequestBody ReqUploadCyclingRecord requestBody) {
 		// ユーザー情報を認証する
 		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
 		if (!userService.authenticate(requestUser)) {
 			// 認証失敗の場合は、UNAUTHORIZEDを応答し、終了する。
-			return new ResponseEntity<ResPostCyclingRecord>(null, null, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<ResUploadCyclingRecord>(null, null, HttpStatus.UNAUTHORIZED);
 		}
 
 		// 走行記録テーブルに登録する
 		CyclingRecord record = cyclingRecordService.create(requestBody);
 		if (record == null) {
 			// 登録できなかった場合は、NOT_ACCEPTABLEを応答し、終了する。
-			return new ResponseEntity<ResPostCyclingRecord>(null, null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<ResUploadCyclingRecord>(null, null, HttpStatus.NOT_ACCEPTABLE);
 		}
 
 		// GPSデータ登録用Keyを作成する
@@ -88,28 +89,31 @@ public class ChariLogRestController {
 		KeyToRecord registered = keyToRecordService.register(entity);
 		if (registered == null) {
 			// 登録できなかった場合は、NOT_ACCEPTABLEを応答し、終了する。
-			return new ResponseEntity<ResPostCyclingRecord>(null, null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<ResUploadCyclingRecord>(null, null, HttpStatus.NOT_ACCEPTABLE);
 		}
 
 		// BodyにGPSデータ登録用Keyを格納して、ACCEPTEDを応答する。
-		ResPostCyclingRecord jsonBody = new ResPostCyclingRecord(key);
-		return new ResponseEntity<ResPostCyclingRecord>(jsonBody, null, HttpStatus.ACCEPTED);
+		ResUploadCyclingRecord jsonBody = new ResUploadCyclingRecord(key);
+		return new ResponseEntity<ResUploadCyclingRecord>(jsonBody, null, HttpStatus.ACCEPTED);
 	}
 
 	// 指定されたユーザーの走行記録を取得
-	@RequestMapping(value = "record", method = RequestMethod.GET)
-	ResponseEntity<List<CyclingRecord>> downloadRecord(@RequestBody ReqGetCyclingRecord requestBody) {
+	@RequestMapping(value = "record/download", method = RequestMethod.POST)
+	ResponseEntity<List<ResDownloadCyclingRecord>> downloadRecord(@RequestBody ReqAccountInfo requestBody) {
 		// ユーザー情報を認証する
 		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
 		if (!userService.authenticate(requestUser)) {
 			// 認証失敗の場合は、UNAUTHORIZEDを応答し、終了する。
-			return new ResponseEntity<List<CyclingRecord>>(null, null, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<List<ResDownloadCyclingRecord>>(null, null, HttpStatus.UNAUTHORIZED);
 		}
 
 		// 指定されたユーザーの走行記録を取得する
 		List<CyclingRecord> records = cyclingRecordService.findByUserId(requestUser.getUserId());
-
-		return new ResponseEntity<List<CyclingRecord>>(records, null, HttpStatus.OK);
+		List<ResDownloadCyclingRecord> response = new ArrayList<>();
+		for (CyclingRecord e : records) {
+			response.add(new ResDownloadCyclingRecord(e));
+		}
+		return new ResponseEntity<List<ResDownloadCyclingRecord>>(response, null, HttpStatus.OK);
 	}
 	
 
@@ -121,7 +125,7 @@ public class ChariLogRestController {
 
 	// GPSデータ(走行記録1件分)を登録
 	@RequestMapping(value = "gps", method = RequestMethod.POST)
-	ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqPostGPSData requestBody) {
+	ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
 		System.out.println(requestBody.toString());
 
 		// key管理用テーブルからそのkeyに対応するrecordIdを取得する

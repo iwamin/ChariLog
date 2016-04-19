@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReqPostCyclingRecord {
+public class ReqUploadCyclingRecord {
 	private String userId;
 	private String password;
 	private String deviceId;

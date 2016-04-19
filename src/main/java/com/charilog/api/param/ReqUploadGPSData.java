@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReqPostGPSData {
+public class ReqUploadGPSData {
 	private String key;
 	private GPSElement[] data;
 }

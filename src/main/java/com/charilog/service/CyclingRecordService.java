@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.charilog.api.param.ReqPostCyclingRecord;
+import com.charilog.api.param.ReqUploadCyclingRecord;
 import com.charilog.domain.CyclingRecord;
 import com.charilog.repository.CyclingRecordJpaRepository;
 import com.charilog.repository.CyclingRecordRepository;
@@ -24,7 +24,7 @@ public class CyclingRecordService {
 		return cyclingRecordJpaRepository.findAll();
 	}
 
-	public CyclingRecord create(ReqPostCyclingRecord requestBody) {
+	public CyclingRecord create(ReqUploadCyclingRecord requestBody) {
 
 		// ToDo : {userId, deviceId, dateTime}が同じレコードは登録できないようにする
 

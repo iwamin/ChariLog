@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResPostCyclingRecord {
+public class ResUploadCyclingRecord {
 	private String key;
 }
