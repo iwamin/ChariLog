@@ -42,8 +42,7 @@ public class UserService {
 		return userJpaRepository.save(user);
 	}
 
-	public boolean delete(User user) {
+	public void delete(User user) {
 		userJpaRepository.delete(user);
-		return true;
 	}
 }

@@ -46,8 +46,8 @@ public class ChariLogRestController {
 	private KeyToRecordService keyToRecordService;
 
 	// ユーザー作成
-	@RequestMapping(value = "account", method = RequestMethod.POST)
-	public ResponseEntity<User> create(@RequestBody ReqAccountInfo requestBody) {
+	@RequestMapping(value = "account/create", method = RequestMethod.POST)
+	public ResponseEntity<User> createUser(@RequestBody ReqAccountInfo requestBody) {
 		User user = new User(requestBody.getUserId(), requestBody.getPassword());
 		ResponseEntity<User> response;
 
@@ -58,6 +58,28 @@ public class ChariLogRestController {
 			response = new ResponseEntity<>(created, null, HttpStatus.CREATED);
 		}
 		return response;
+	}
+
+	// ユーザー削除
+	@RequestMapping(value = "account/delete", method = RequestMethod.POST)
+	public ResponseEntity<Object> deleteUser(@RequestBody ReqAccountInfo requestBody) {
+		// ユーザー情報を認証する
+		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
+		if (!userService.authenticate(requestUser)) {
+			// 認証失敗の場合は、UNAUTHORIZEDを応答し、終了する。
+			return new ResponseEntity<>(null, null, HttpStatus.UNAUTHORIZED);
+		}
+
+		List<CyclingRecord> records = cyclingRecordService.findByUserId(requestUser.getUserId());
+		for (CyclingRecord record : records) {
+			// 走行記録テーブルから削除
+			cyclingRecordService.delete(record.getRecordId());
+			// GPSテーブルから削除
+			gpsDataService.deleteByRecordId(record.getRecordId());
+		}
+		userService.delete(requestUser);
+
+		return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
 	}
 
 	// 走行記録1件登録
