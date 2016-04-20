@@ -13,10 +13,10 @@ import com.charilog.repository.KeyToRecordRepository;
 public class KeyToRecordService {
 
 	@Autowired
-	KeyToRecordJpaRepository keyToRecordJpaRepository;
+	private KeyToRecordJpaRepository keyToRecordJpaRepository;
 
 	@Autowired
-	KeyToRecordRepository keyToRecordRepository;
+	private KeyToRecordRepository keyToRecordRepository;
 
 	public KeyToRecord find(String key) {
 		return keyToRecordJpaRepository.findOne(key);

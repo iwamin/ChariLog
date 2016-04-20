@@ -15,19 +15,16 @@ import com.charilog.repository.CyclingRecordRepository;
 @Transactional
 public class CyclingRecordService {
 	@Autowired
-	CyclingRecordJpaRepository cyclingRecordJpaRepository;
+	private CyclingRecordJpaRepository cyclingRecordJpaRepository;
 
 	@Autowired
-	CyclingRecordRepository cyclingRecordRepository;
-	
+	private CyclingRecordRepository cyclingRecordRepository;
+
 	public List<CyclingRecord> findAll() {
 		return cyclingRecordJpaRepository.findAll();
 	}
 
 	public CyclingRecord create(ReqUploadCyclingRecord requestBody) {
-
-		// ToDo : {userId, deviceId, dateTime}が同じレコードは登録できないようにする
-
 		CyclingRecord record = new CyclingRecord(requestBody);
 		return cyclingRecordJpaRepository.save(record);
 	}

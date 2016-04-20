@@ -33,26 +33,20 @@ import com.charilog.service.UserService;
 @RequestMapping("")
 public class ChariLogRestController {
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	@Autowired
-	CyclingRecordService cyclingRecordService;
+	private CyclingRecordService cyclingRecordService;
 
 	@Autowired
-	GPSDataService gpsDataService;
+	private GPSDataService gpsDataService;
 	
 	@Autowired
-	KeyToRecordService keyToRecordService;
-
-	// ユーザーリスト取得(※デバッグ用)
-//	@RequestMapping(value = "account", method = RequestMethod.GET)
-//	List<User> getUserList() {
-//		return userService.findAll();
-//	}
+	private KeyToRecordService keyToRecordService;
 
 	// ユーザー作成
 	@RequestMapping(value = "account", method = RequestMethod.POST)
-	ResponseEntity<User> create(@RequestBody ReqAccountInfo requestBody) {
+	public ResponseEntity<User> create(@RequestBody ReqAccountInfo requestBody) {
 		User user = new User(requestBody.getUserId(), requestBody.getPassword());
 		ResponseEntity<User> response;
 
@@ -67,7 +61,7 @@ public class ChariLogRestController {
 
 	// 走行記録1件登録
 	@RequestMapping(value = "record/upload", method = RequestMethod.POST)
-	ResponseEntity<ResUploadCyclingRecord> uploadRecord(@RequestBody ReqUploadCyclingRecord requestBody) {
+	public ResponseEntity<ResUploadCyclingRecord> uploadRecord(@RequestBody ReqUploadCyclingRecord requestBody) {
 		// ユーザー情報を認証する
 		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
 		if (!userService.authenticate(requestUser)) {
@@ -110,7 +104,7 @@ public class ChariLogRestController {
 
 	// 指定されたユーザーの走行記録を取得
 	@RequestMapping(value = "record/download", method = RequestMethod.POST)
-	ResponseEntity<List<ResDownloadCyclingRecord>> downloadRecord(@RequestBody ReqAccountInfo requestBody) {
+	public ResponseEntity<List<ResDownloadCyclingRecord>> downloadRecord(@RequestBody ReqAccountInfo requestBody) {
 		// ユーザー情報を認証する
 		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
 		if (!userService.authenticate(requestUser)) {
@@ -126,17 +120,10 @@ public class ChariLogRestController {
 		}
 		return new ResponseEntity<List<ResDownloadCyclingRecord>>(response, null, HttpStatus.OK);
 	}
-	
-
-	// 走行記録リストを取得(※デバッグ用)
-	@RequestMapping(value = "record2", method = RequestMethod.GET)
-	List<CyclingRecord> findAll() {
-		return cyclingRecordService.findAll();
-	}
 
 	// GPSデータ(走行記録1件分)を登録
 	@RequestMapping(value = "gps/upload", method = RequestMethod.POST)
-	ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
+	public ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
 		System.out.println(requestBody.toString());
 
 		// key管理用テーブルからそのkeyに対応するrecordIdを取得する
@@ -160,20 +147,32 @@ public class ChariLogRestController {
 
 	// GPSデータ登録用keyの無効化要求
 	@RequestMapping(value = "gps/invalidate-key", method = RequestMethod.POST)
-	ResponseEntity<Object> invalidateKey(@RequestBody ReqInvalidateKey body) {
+	public ResponseEntity<Object> invalidateKey(@RequestBody ReqInvalidateKey body) {
 		keyToRecordService.delete(body.getKey());
 		return new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
 	}
 
+	// ユーザーリスト取得(※デバッグ用)
+//	@RequestMapping(value = "account", method = RequestMethod.GET)
+//	public List<User> getUserList() {
+//		return userService.findAll();
+//	}
+
+	// 走行記録リストを取得(※デバッグ用)
+//	@RequestMapping(value = "record2", method = RequestMethod.GET)
+//	public List<CyclingRecord> findAll() {
+//		return cyclingRecordService.findAll();
+//	}
+
 	// GPSデータテーブルの取得(※デバッグ用)
-	@RequestMapping(value = "gps/download", method = RequestMethod.GET)
-	List<GPSData> downloadGPSData() {
-		return gpsDataService.findAll();
-	}
+//	@RequestMapping(value = "gps/download", method = RequestMethod.GET)
+//	public List<GPSData> downloadGPSData() {
+//		return gpsDataService.findAll();
+//	}
 
 	// JSON内容表示(※デバッグ用)
 	@RequestMapping(value = "test", method = RequestMethod.POST)
-	void testPost(@RequestBody String requestBody, @RequestHeader("Content-Type") String type) {
+	public void testPost(@RequestBody String requestBody, @RequestHeader("Content-Type") String type) {
 		System.out.println("TEST:\n" + type + "\n" + requestBody);
 	}
 }

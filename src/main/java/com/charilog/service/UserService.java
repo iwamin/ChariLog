@@ -14,7 +14,7 @@ import com.charilog.repository.UserJpaRepository;
 @Transactional
 public class UserService {
 	@Autowired
-	UserJpaRepository userJpaRepository;
+	private UserJpaRepository userJpaRepository;
 
 	public List<User> findAll() {
 		return userJpaRepository.findAll();
@@ -37,14 +37,13 @@ public class UserService {
 			return false;
 		}
 	}
-	
+
 	public User create(User user) {
 		return userJpaRepository.save(user);
 	}
-	
+
 	public boolean delete(User user) {
 		userJpaRepository.delete(user);
 		return true;
 	}
-
 }

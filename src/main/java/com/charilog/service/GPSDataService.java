@@ -16,10 +16,10 @@ import com.charilog.repository.GPSDataRepository;
 public class GPSDataService {
 
 	@Autowired
-	GPSDataJpaRepository gpsDataJpaRepository;
+	private GPSDataJpaRepository gpsDataJpaRepository;
 
 	@Autowired
-	GPSDataRepository gpsDataRepository;
+	private GPSDataRepository gpsDataRepository;
 
 	public List<GPSData>findAll() {
 		return gpsDataJpaRepository.findAll();

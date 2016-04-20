@@ -18,7 +18,7 @@ import static com.charilog.constant.SQLConstants.*;
 @Transactional
 public class CyclingRecordRepository {
 	@Autowired
-	NamedParameterJdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	private static final RowMapper<CyclingRecord> CYCLING_RECORD_ROW_MAPPER = (rs, i) -> {
 		return new CyclingRecord(

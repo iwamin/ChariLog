@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GPSDataRepository {
 	@Autowired
-	NamedParameterJdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 //	private static final RowMapper<GPSData> GPS_DATA_ROW_MAPPER = (rs, i) -> {
 //		return new GPSData(
