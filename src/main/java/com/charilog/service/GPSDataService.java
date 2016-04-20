@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.charilog.api.param.GPSElement;
 import com.charilog.domain.GPSData;
 import com.charilog.repository.GPSDataJpaRepository;
+import com.charilog.repository.GPSDataRepository;
 
 @Service
 @Transactional
@@ -16,6 +17,9 @@ public class GPSDataService {
 
 	@Autowired
 	GPSDataJpaRepository gpsDataJpaRepository;
+
+	@Autowired
+	GPSDataRepository gpsDataRepository;
 
 	public List<GPSData>findAll() {
 		return gpsDataJpaRepository.findAll();
@@ -25,5 +29,9 @@ public class GPSDataService {
 		GPSData gpsData = new GPSData(request);
 		gpsData.setRecordId(recordId);
 		return gpsDataJpaRepository.save(gpsData);
+	}
+
+	public void deleteByRecordId(Integer recordId) {
+		gpsDataRepository.deleteByRecordId(recordId);
 	}
 }

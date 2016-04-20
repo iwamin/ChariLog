@@ -49,4 +49,29 @@ public class CyclingRecordRepository {
 
 		return records;
 	}
+
+	public List<CyclingRecord> find(String userId, String deviceId, Long dateTime) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * FROM ");
+		sql.append(TABLE_NAME_CYCLING_RECORD);
+		sql.append(" WHERE ");
+		sql.append(COLUMN_CYCRECORD_USER_ID);
+		sql.append(" = :");
+		sql.append(COLUMN_CYCRECORD_USER_ID);
+		sql.append(" AND ");
+		sql.append(COLUMN_CYCRECORD_DEVICE_ID);
+		sql.append(" = :");
+		sql.append(COLUMN_CYCRECORD_DEVICE_ID);
+		sql.append(" AND ");
+		sql.append(COLUMN_CYCRECORD_DATE_TIME);
+		sql.append(" = :");
+		sql.append(COLUMN_CYCRECORD_DATE_TIME);
+
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue(COLUMN_CYCRECORD_USER_ID, userId);
+		param.addValue(COLUMN_CYCRECORD_DEVICE_ID, deviceId);
+		param.addValue(COLUMN_CYCRECORD_DATE_TIME, dateTime);
+
+		return jdbcTemplate.query(sql.toString(), param, CYCLING_RECORD_ROW_MAPPER);
+	}
 }

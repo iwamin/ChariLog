@@ -75,6 +75,16 @@ public class ChariLogRestController {
 			return new ResponseEntity<ResUploadCyclingRecord>(null, null, HttpStatus.UNAUTHORIZED);
 		}
 
+		// 前回送信時に処理が中断された場合、同じデータが登録されている可能性があるので、登録前に削除する()。
+		CyclingRecord old = cyclingRecordService.find(
+				requestBody.getUserId(), requestBody.getDeviceId(), requestBody.getDateTime());
+		if (old != null) {
+			// 走行記録テーブルから削除
+			cyclingRecordService.delete(old.getRecordId());
+			// GPSテーブルから削除
+			gpsDataService.deleteByRecordId(old.getRecordId());
+		}
+
 		// 走行記録テーブルに登録する
 		CyclingRecord record = cyclingRecordService.create(requestBody);
 		if (record == null) {

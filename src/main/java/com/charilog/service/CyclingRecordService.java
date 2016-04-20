@@ -35,4 +35,18 @@ public class CyclingRecordService {
 	public List<CyclingRecord> findByUserId(String userId) {
 		return cyclingRecordRepository.findByUserId(userId);
 	}
+
+	public CyclingRecord find(String userId, String deviceId, Long dateTime) {
+		List<CyclingRecord> records = cyclingRecordRepository.find(userId, deviceId, dateTime);
+
+		if (records.isEmpty()) {
+			return null;
+		} else {
+			return records.get(0);
+		}
+	}
+
+	public void delete(Integer id) {
+		cyclingRecordJpaRepository.delete(id);
+	}
 }
