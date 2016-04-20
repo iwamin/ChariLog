@@ -24,6 +24,10 @@ public class CyclingRecordService {
 		return cyclingRecordJpaRepository.findAll();
 	}
 
+	public CyclingRecord findOne(Integer recordId) {
+		return cyclingRecordJpaRepository.findOne(recordId);
+	}
+	
 	public CyclingRecord create(ReqUploadCyclingRecord requestBody) {
 		CyclingRecord record = new CyclingRecord(requestBody);
 		return cyclingRecordJpaRepository.save(record);

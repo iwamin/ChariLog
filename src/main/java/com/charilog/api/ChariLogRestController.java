@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.charilog.api.param.GPSElement;
 import com.charilog.api.param.ReqAccountInfo;
+import com.charilog.api.param.ReqDeleteCyclingRecord;
 import com.charilog.api.param.ReqInvalidateKey;
 import com.charilog.api.param.ReqUploadCyclingRecord;
 import com.charilog.api.param.ReqUploadGPSData;
@@ -121,6 +122,30 @@ public class ChariLogRestController {
 		return new ResponseEntity<List<ResDownloadCyclingRecord>>(response, null, HttpStatus.OK);
 	}
 
+	// 走行記録1件を削除
+	@RequestMapping(value = "record/delete", method = RequestMethod.POST)
+	public ResponseEntity<Object> deleteRecord(@RequestBody ReqDeleteCyclingRecord requestBody) {
+		// ユーザー情報を認証する
+		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
+		if (!userService.authenticate(requestUser)) {
+			// 認証失敗の場合は、UNAUTHORIZEDを応答し、終了する。
+			return new ResponseEntity<>(null, null, HttpStatus.UNAUTHORIZED);
+		}
+
+		// 指定されたレコードIDがそのユーザーのものかを確認する
+		CyclingRecord record = cyclingRecordService.findOne(requestBody.getRecordId());
+		if ((record != null)
+				&& (record.getUserId().equals(requestBody.getUserId()))) {
+			// 走行記録テーブルから削除
+			cyclingRecordService.delete(requestBody.getRecordId());
+			// GPSテーブルから削除
+			gpsDataService.deleteByRecordId(requestBody.getRecordId());
+			return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
+		}
+	}
+	
 	// GPSデータ(走行記録1件分)を登録
 	@RequestMapping(value = "gps/upload", method = RequestMethod.POST)
 	public ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
