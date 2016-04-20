@@ -28,4 +28,8 @@ public class KeyToRecordService {
 		// 新しいキーを登録する
 		return keyToRecordJpaRepository.save(entity);
 	}
+
+	public void delete(String key) {
+		keyToRecordJpaRepository.delete(key);
+	}
 }

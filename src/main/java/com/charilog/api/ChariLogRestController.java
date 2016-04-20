@@ -151,8 +151,7 @@ public class ChariLogRestController {
 	// GPSデータ登録用keyの無効化要求
 	@RequestMapping(value = "gps/invalidate-key", method = RequestMethod.POST)
 	ResponseEntity<Object> invalidateKey(@RequestBody ReqInvalidateKey body) {
-		// 作成中
-		System.out.println(body.toString());
+		keyToRecordService.delete(body.getKey());
 		return new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
 	}
 
