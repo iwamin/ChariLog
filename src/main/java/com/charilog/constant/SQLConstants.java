@@ -21,7 +21,7 @@ public class SQLConstants {
 	public static final String TABLE_NAME_GPS_DATA = "gps_data";
 	public static final String COLUMN_GPSDATA_GPS_ID = "gps_id";
 	public static final String COLUMN_GPSDATA_RECORD_ID = "record_id";
-	public static final String COLUMN_GPSDATA_DATE_TIME = "dateTime";
+	public static final String COLUMN_GPSDATA_DATE_TIME = "date_time";
 	public static final String COLUMN_GPSDATA_LATITUDE = "latitude";
 	public static final String COLUMN_GPSDATA_LONGITUDE = "longitude";
 	public static final String COLUMN_GPSDATA_ALTITUDE = "altitude";

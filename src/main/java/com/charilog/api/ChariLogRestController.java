@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.charilog.api.param.GPSElement;
 import com.charilog.api.param.ReqAccountInfo;
 import com.charilog.api.param.ReqDeleteCyclingRecord;
+import com.charilog.api.param.ReqDownloadGPSData;
 import com.charilog.api.param.ReqInvalidateKey;
 import com.charilog.api.param.ReqUploadCyclingRecord;
 import com.charilog.api.param.ReqUploadGPSData;
 import com.charilog.api.param.ResDownloadCyclingRecord;
+import com.charilog.api.param.ResDownloadGPSData;
 import com.charilog.api.param.ResUploadCyclingRecord;
 import com.charilog.domain.CyclingRecord;
 import com.charilog.domain.GPSData;
@@ -170,7 +172,7 @@ public class ChariLogRestController {
 	
 	// GPSデータ(走行記録1件分)を登録
 	@RequestMapping(value = "gps/upload", method = RequestMethod.POST)
-	public ResponseEntity<GPSData> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
+	public ResponseEntity<Object> uploadGPSData(@RequestBody ReqUploadGPSData requestBody) {
 		System.out.println(requestBody.toString());
 
 		// key管理用テーブルからそのkeyに対応するrecordIdを取得する
@@ -188,8 +190,37 @@ public class ChariLogRestController {
 				return new ResponseEntity<>(null, null, HttpStatus.NOT_ACCEPTABLE);
 			}
 		}
-		ResponseEntity<GPSData> response = new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
-		return response;
+		return new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
+	}
+
+	// GPSデータ(走行記録1件分)を取得
+	@RequestMapping(value = "gps/download", method = RequestMethod.POST)
+	public ResponseEntity<ResDownloadGPSData> downloadGPSData(@RequestBody ReqDownloadGPSData requestBody) {
+		// ユーザー情報を認証する
+		User requestUser = new User(requestBody.getUserId(), requestBody.getPassword());
+		if (!userService.authenticate(requestUser)) {
+			// 認証失敗の場合は、UNAUTHORIZEDを応答し、終了する。
+			return new ResponseEntity<>(null, null, HttpStatus.UNAUTHORIZED);
+		}
+
+		// 指定されたレコードIDがそのユーザーのものかを確認する
+		CyclingRecord record = cyclingRecordService.findOne(requestBody.getRecordId());
+		if ((record != null)
+				&& (record.getUserId().equals(requestBody.getUserId()))) {
+			ResDownloadGPSData response = new ResDownloadGPSData();
+			List<GPSData> gpsList = gpsDataService.findByRecordId(record.getRecordId());
+			List<GPSElement> gpsElements = new ArrayList<>();
+			for (GPSData e : gpsList) {
+				gpsElements.add(new GPSElement(e));
+			}
+			response.setRecordId(record.getRecordId());
+			response.setData(gpsElements.toArray(new GPSElement[0]));
+			return new ResponseEntity<>(response, null, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
+		}
+
+		
 	}
 
 	// GPSデータ登録用keyの無効化要求

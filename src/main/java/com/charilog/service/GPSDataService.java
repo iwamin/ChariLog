@@ -34,4 +34,8 @@ public class GPSDataService {
 	public void deleteByRecordId(Integer recordId) {
 		gpsDataRepository.deleteByRecordId(recordId);
 	}
+
+	public List<GPSData> findByRecordId(Integer recordId) {
+		return gpsDataRepository.findByRecordId(recordId);
+	}
 }
