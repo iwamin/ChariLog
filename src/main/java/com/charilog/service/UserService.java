@@ -9,16 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.charilog.domain.User;
 import com.charilog.repository.UserJpaRepository;
-import com.charilog.repository.UserRepository;
 
 @Service
 @Transactional
 public class UserService {
 	@Autowired
 	UserJpaRepository userJpaRepository;
-
-	@Autowired
-	UserRepository userRepository;
 
 	public List<User> findAll() {
 		return userJpaRepository.findAll();
